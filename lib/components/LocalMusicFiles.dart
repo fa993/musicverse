@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'package:musicverse/models/MusicFile.dart';
 import 'package:musicverse/services/AudioController.dart';
 import 'package:path_provider/path_provider.dart';
@@ -27,7 +25,7 @@ class LocalMusicFiles extends StatefulWidget {
   State<LocalMusicFiles> createState() => _LocalMusicFilesState();
 }
 
-class _LocalMusicFilesState extends State<LocalMusicFiles> {
+class _LocalMusicFilesState extends State<LocalMusicFiles> with AutomaticKeepAliveClientMixin {
 
   late Directory _appDir;
   List<MusicFile> _children = [];
@@ -50,7 +48,7 @@ class _LocalMusicFilesState extends State<LocalMusicFiles> {
 
   void refresh() {
     setState(() {
-      _children = _appDir.listSync().map((e) => MusicFile(file: File(e.path), name: Path.basename(e.path))).toList();
+      _children = _appDir.listSync().where((e) => e.path.endsWith(".mp3")).map((e) => MusicFile(file: File(e.path), name: Path.basename(e.path))).toList();
       _copyChildren = _children.map((e) => e.toMusicItem()).toList();
     });
   }
@@ -71,6 +69,7 @@ class _LocalMusicFilesState extends State<LocalMusicFiles> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MusicList(
       onClick: (context, index) async {
         _playTrack(index);
@@ -86,5 +85,6 @@ class _LocalMusicFilesState extends State<LocalMusicFiles> {
     );
   }
 
-
+  @override
+  bool get wantKeepAlive => true;
 }

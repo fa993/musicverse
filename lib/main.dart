@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:musicverse/components/RemoteMusicFiles.dart';
 import 'package:musicverse/components/Settings.dart';
 import 'package:musicverse/services/AudioController.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/LocalMusicFiles.dart';
 
@@ -15,6 +16,7 @@ Future<void> main() async {
       androidNotificationOngoing: true,
     ),
   );
+  preferences = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
@@ -26,10 +28,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300),
-        useMaterial3: true,
-      ),
+      theme: ThemeData.from(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300), useMaterial3: true),
+      darkTheme: ThemeData.from(
+          colorScheme: ColorScheme.dark().copyWith(
+            primary: Colors.blue.shade900,
+            primaryContainer: Colors.blue.shade500,
+          ),
+          useMaterial3: true),
+      // darkTheme: ThemeData(
+      //   brightness: Brightness.dark,
+      //   // colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300),
+      //
+      //   useMaterial3: true,
+      // ),
+      // theme: ThemeData(
+      //   brightness: Brightness.light,
+      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300),
+      //   useMaterial3: true,
+      // ),
       home: const MusicVerse(),
     );
   }
@@ -43,7 +59,6 @@ class MusicVerse extends StatefulWidget {
 }
 
 class _MusicVerseState extends State<MusicVerse> {
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -51,10 +66,6 @@ class _MusicVerseState extends State<MusicVerse> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {},
-          ),
           title: const Text("MusicVerse"),
         ),
         body: const TabBarView(
@@ -63,7 +74,7 @@ class _MusicVerseState extends State<MusicVerse> {
               child: LocalMusicFiles(),
             ),
             Center(
-              child: RemoteMusicFiles()
+              child: RemoteMusicFiles(),
             ),
             Center(
               child: SettingsScreen(),

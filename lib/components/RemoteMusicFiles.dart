@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:musicverse/auth/secrets.dart';
 import 'package:musicverse/components/MusicList.dart';
+import 'package:musicverse/components/Settings.dart';
 import 'package:musicverse/models/MusicItem.dart';
 import 'package:musicverse/services/AudioController.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 
 final dio = Dio();
-
-String getUrl(fileName) => "http://127.0.0.1:8000/raw/$fileName";
 
 class RemoteMusicFiles extends StatefulWidget {
   static final AudioController audioController = AudioController.instance;
@@ -25,30 +24,37 @@ class RemoteMusicFiles extends StatefulWidget {
 
 class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepAliveClientMixin {
   List<MusicItem> _children = [];
-
   Directory? _appDir;
+
 
   Future<void> _playTrack(index) async {
     String fileName = _children[index].name;
     if (fileName.isEmpty) {
       return;
     }
-
     await RemoteMusicFiles.audioController.playTrackWithQueue(index, _children);
   }
 
+  // http://127.0.0.1:8000/api/'
   Future<void> _loadTracks() async {
+    String? baseSourceURL = preferences.getString("RemoteURLSource");
+    String? baseIndexURL = preferences.getString("RemoteURLIndex");
+    if(baseIndexURL == null){
+      return;
+    }
+    print(baseIndexURL);
+    print(baseSourceURL);
     try {
-      final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/'));
+      final response = await http.get(Uri.parse(baseIndexURL!));
       if (response.statusCode < 300 && response.statusCode >= 200) {
         print(response.body);
         var childs = ((json.decode(response.body) as Map<String, dynamic>)["sub_entries"] as List)
             .where((e) => e["entry_type"] == "File")
             .where((e) => e["name"]?.endsWith(".mp3"))
             .map((i) => i["name"])
-            .map((e) => MusicItem.uri(e, getUrl(e)))
+            .map((e) => MusicItem.uri(e, "$baseSourceURL/$e"))
             .toList();
-        if(mounted) {
+        if (mounted) {
           setState(() {
             _children = childs;
           });
