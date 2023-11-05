@@ -6,12 +6,11 @@ import 'package:http/http.dart' as http;
 import 'package:musicverse/auth/secrets.dart';
 import 'package:musicverse/components/MusicList.dart';
 import 'package:musicverse/components/Settings.dart';
+import 'package:musicverse/main.dart';
 import 'package:musicverse/models/MusicItem.dart';
 import 'package:musicverse/services/AudioController.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
-
-final dio = Dio();
 
 class RemoteMusicFiles extends StatefulWidget {
   static final AudioController audioController = AudioController.instance;
@@ -24,8 +23,6 @@ class RemoteMusicFiles extends StatefulWidget {
 
 class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepAliveClientMixin {
   List<MusicItem> _children = [];
-  Directory? _appDir;
-
 
   Future<void> _playTrack(index) async {
     String fileName = _children[index].name;
@@ -42,12 +39,9 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
     if(baseIndexURL == null){
       return;
     }
-    print(baseIndexURL);
-    print(baseSourceURL);
     try {
-      final response = await http.get(Uri.parse(baseIndexURL!));
+      final response = await http.get(Uri.parse(baseIndexURL));
       if (response.statusCode < 300 && response.statusCode >= 200) {
-        print(response.body);
         var childs = ((json.decode(response.body) as Map<String, dynamic>)["sub_entries"] as List)
             .where((e) => e["entry_type"] == "File")
             .where((e) => e["name"]?.endsWith(".mp3"))
@@ -65,22 +59,10 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
     }
   }
 
-  void _loadLocalDir() async {
-    var path = await getApplicationDocumentsDirectory();
-    String localPath = '${path.path}${Platform.pathSeparator}Download';
-    final savedDir = Directory(localPath);
-    bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
-    _appDir = savedDir;
-  }
-
   @override
   void initState() {
     super.initState();
     _loadTracks();
-    _loadLocalDir();
   }
 
   // @override
@@ -97,7 +79,7 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
         _playTrack(index);
       },
       onIconClick: (context, index) async {
-        dio.download(_children[index].path, "${_appDir!.path}${Platform.pathSeparator}${_children[index].name}",
+        dio.download(_children[index].path, "${appDir.path}${Platform.pathSeparator}${_children[index].name}",
             options: Options(headers: {HttpHeaders.authorizationHeader: token}));
       },
       icon: const Icon(Icons.download),

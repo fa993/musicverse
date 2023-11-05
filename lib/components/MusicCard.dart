@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 
-
 String clean(String name) {
   return name.substring(0, name.lastIndexOf('.'));
 }
-
 
 class MusicCard extends StatefulWidget {
   final String songName;

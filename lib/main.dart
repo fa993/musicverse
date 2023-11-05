@@ -1,11 +1,20 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:musicverse/components/RemoteMusicFiles.dart';
 import 'package:musicverse/components/Settings.dart';
 import 'package:musicverse/services/AudioController.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/LocalMusicFiles.dart';
+
+final dio = Dio();
+
+late final Directory appDir;
+late final Directory cacheDir;
 
 Future<void> main() async {
   AudioController.audioHandler = await AudioService.init(
@@ -17,6 +26,22 @@ Future<void> main() async {
     ),
   );
   preferences = await SharedPreferences.getInstance();
+
+
+  var path = await getApplicationDocumentsDirectory();
+  String localPath = '${path.path}${Platform.pathSeparator}Download';
+  final savedDir = Directory(localPath);
+  bool hasExisted = await savedDir.exists();
+  if (!hasExisted) {
+    savedDir.create();
+  }
+  appDir = savedDir;
+
+  cacheDir = await getApplicationCacheDirectory();
+  var t = cacheDir.listSync();
+  for(var ch in t) {
+    ch.deleteSync(recursive: true);
+  }
   runApp(const MyApp());
 }
 

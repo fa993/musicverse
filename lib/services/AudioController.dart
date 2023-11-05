@@ -1,6 +1,11 @@
-import 'package:audio_service/audio_service.dart';
-import 'package:just_audio/just_audio.dart';
+import 'dart:io';
 
+import 'package:audio_service/audio_service.dart';
+import 'package:dio/dio.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:musicverse/main.dart';
+
+import '../auth/secrets.dart';
 import '../models/MusicItem.dart';
 
 class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
@@ -61,7 +66,17 @@ class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
 
   Future<void> setCurrentMusicItem() async {
     var music = _currentItems[_currentIndex];
-    var dur = await _player.setAudioSource(music.toAudioSource());
+    var auSource = music.toAudioSource();
+    if (!music.isFile) {
+      //for the sake of duration we will download to tmp and then play
+      var localPath = "${cacheDir.path}${Platform.pathSeparator}${music.name}";
+      if (!await File(localPath).exists()) {
+        await dio.download(music.path, localPath, options: Options(headers: {HttpHeaders.authorizationHeader: token}));
+      }
+      music = MusicItem.file(music.name, "${cacheDir.path}${Platform.pathSeparator}${music.name}");
+      auSource = music.toAudioSource();
+    }
+    var dur = await _player.setAudioSource(auSource);
     var mI = music.toMediaItem().copyWith(duration: dur);
     mediaItem.add(mI);
     await play();
@@ -70,10 +85,10 @@ class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
   PlaybackState _transformEvent(PlaybackEvent event) {
     return PlaybackState(
       controls: [
-        MediaControl.rewind,
+        MediaControl.skipToPrevious,
         if (_player.playing) MediaControl.pause else MediaControl.play,
         MediaControl.stop,
-        MediaControl.fastForward,
+        MediaControl.skipToNext,
       ],
       systemActions: const {
         MediaAction.seek,

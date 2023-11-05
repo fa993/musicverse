@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicverse/main.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,7 +38,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
           ],
-        )
+        ),
+        SettingsSection(
+          title: const Text("Advanced"),
+          tiles: [
+            SettingsTile(
+              title: const Text("Clear cache"),
+              onPressed: (context) async {
+                var t = cacheDir.listSync();
+                for(var ch in t) {
+                  await ch.delete(recursive: true);
+                }
+              },
+            )
+        ],),
       ],
     );
   }

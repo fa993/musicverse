@@ -28,13 +28,15 @@ class MusicList extends StatefulWidget {
 }
 
 class _MusicListState extends State<MusicList> {
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-      child: Column(
-        children: [
-          TextField(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+          child: TextField(
             autocorrect: true,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -47,37 +49,47 @@ class _MusicListState extends State<MusicList> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
-          Expanded(
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
-              slivers: [
-                CupertinoSliverRefreshControl(
-                  onRefresh: () async {
-                    await Future.wait([
-                      Future<void>.delayed(const Duration(milliseconds: 200)),
-                      widget.refreshMusicList(),
-                    ]);
-                  },
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+          child: SizedBox(height: 10),
+        ),
+        Expanded(
+          child: Scrollbar(
+            controller: _scrollController,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+              child: CustomScrollView(
+                controller: _scrollController,
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
                 ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) => MusicCard(
-                      onClick: () => widget.onClick(context, index),
-                      onIconClick: () => widget.onIconClick(context, index),
-                      songName: widget.builder(context, index),
-                      icon: widget.icon,
-                    ),
-                    childCount: widget.musicListLength,
+                slivers: [
+                  CupertinoSliverRefreshControl(
+                    onRefresh: () async {
+                      await Future.wait([
+                        Future<void>.delayed(const Duration(milliseconds: 200)),
+                        widget.refreshMusicList(),
+                      ]);
+                    },
                   ),
-                ),
-              ],
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) => MusicCard(
+                        onClick: () => widget.onClick(context, index),
+                        onIconClick: () => widget.onIconClick(context, index),
+                        songName: widget.builder(context, index),
+                        icon: widget.icon,
+                      ),
+                      childCount: widget.musicListLength,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
