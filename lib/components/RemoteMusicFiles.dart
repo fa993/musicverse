@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:musicverse/auth/secrets.dart';
@@ -9,8 +10,6 @@ import 'package:musicverse/components/Settings.dart';
 import 'package:musicverse/main.dart';
 import 'package:musicverse/models/MusicItem.dart';
 import 'package:musicverse/services/AudioController.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:dio/dio.dart';
 
 class RemoteMusicFiles extends StatefulWidget {
   static final AudioController audioController = AudioController.instance;
