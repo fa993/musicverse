@@ -96,8 +96,8 @@ class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
         MediaAction.seekBackward,
       },
       androidCompactActionIndices: const [0, 1, 3],
-      processingState: const {
-        ProcessingState.idle: AudioProcessingState.idle,
+      processingState: {
+        ProcessingState.idle: Platform.isIOS ? AudioProcessingState.ready : AudioProcessingState.idle,
         ProcessingState.loading: AudioProcessingState.loading,
         ProcessingState.buffering: AudioProcessingState.buffering,
         ProcessingState.ready: AudioProcessingState.ready,
