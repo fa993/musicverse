@@ -109,10 +109,11 @@ class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
           children: [
             TextField(
               controller: myController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                   filled: true,
                   hintText: "Value",
-                  border: OutlineInputBorder(
+                  fillColor: Theme.of(context).colorScheme.tertiaryContainer,
+                  border: const OutlineInputBorder(
                     borderSide: BorderSide.none,
                   )),
             ),
@@ -120,6 +121,7 @@ class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
               height: 20.0,
             ),
             OutlinedButton(
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiaryContainer)),
               child: const Text("Save"),
               onPressed: () async {
                 await preferences.setString(widget.propertyKey, myController.text);

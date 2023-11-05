@@ -27,7 +27,6 @@ Future<void> main() async {
   );
   preferences = await SharedPreferences.getInstance();
 
-
   var path = await getApplicationDocumentsDirectory();
   String localPath = '${path.path}${Platform.pathSeparator}Download';
   final savedDir = Directory(localPath);
@@ -39,7 +38,7 @@ Future<void> main() async {
 
   cacheDir = await getApplicationCacheDirectory();
   var t = cacheDir.listSync();
-  for(var ch in t) {
+  for (var ch in t) {
     ch.deleteSync(recursive: true);
   }
   runApp(const MyApp());
@@ -53,24 +52,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData.from(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300), useMaterial3: true),
+      theme: ThemeData.from(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300).copyWith(
+          tertiaryContainer: const Color.fromARGB(255, 238, 238, 238),
+        ),
+        useMaterial3: true,
+      ),
       darkTheme: ThemeData.from(
-          colorScheme: ColorScheme.dark().copyWith(
-            primary: Colors.blue.shade900,
+          colorScheme: const ColorScheme.dark().copyWith(
+            primary: Colors.blue.shade500,
             primaryContainer: Colors.blue.shade500,
+            tertiaryContainer: const Color.fromARGB(255, 28, 28, 30),
           ),
           useMaterial3: true),
-      // darkTheme: ThemeData(
-      //   brightness: Brightness.dark,
-      //   // colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300),
-      //
-      //   useMaterial3: true,
-      // ),
-      // theme: ThemeData(
-      //   brightness: Brightness.light,
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300),
-      //   useMaterial3: true,
-      // ),
       home: const MusicVerse(),
     );
   }

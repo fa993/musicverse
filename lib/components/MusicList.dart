@@ -41,6 +41,7 @@ class _MusicListState extends State<MusicList> {
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
               filled: true,
+              fillColor: Theme.of(context).colorScheme.tertiaryContainer,
               // fillColor: const Color.fromARGB(255, 238, 238, 238),
               hintText: "Search",
               border: OutlineInputBorder(
