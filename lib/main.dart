@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'MusicVerse',
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue.shade300).copyWith(
           tertiaryContainer: const Color.fromARGB(255, 238, 238, 238),
@@ -124,7 +124,6 @@ class _MusicVerseState extends State<MusicVerse> {
           child: const Icon(Icons.music_note),
         ),
       ),
-      //This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

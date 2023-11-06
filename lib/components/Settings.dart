@@ -67,7 +67,7 @@ class TextFieldSettingsScreen extends StatefulWidget {
 }
 
 class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
-  final myController = TextEditingController();
+  final _textEditingController = TextEditingController();
 
 
   Future<void> _loadPref() async {
@@ -75,7 +75,7 @@ class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
     if(val == null) {
       return;
     }
-    myController.text = val;
+    _textEditingController.text = val;
   }
 
   @override
@@ -87,7 +87,7 @@ class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
   @override
   void dispose() {
     super.dispose();
-    myController.dispose();
+    _textEditingController.dispose();
   }
 
   @override
@@ -108,7 +108,7 @@ class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
         child: Column(
           children: [
             TextField(
-              controller: myController,
+              controller: _textEditingController,
               decoration: InputDecoration(
                   filled: true,
                   hintText: "Value",
@@ -124,7 +124,7 @@ class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiaryContainer)),
               child: const Text("Save"),
               onPressed: () async {
-                await preferences.setString(widget.propertyKey, myController.text);
+                await preferences.setString(widget.propertyKey, _textEditingController.text);
               },
             ),
           ],

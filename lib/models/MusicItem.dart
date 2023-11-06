@@ -21,7 +21,7 @@ class MusicItem {
         id: clean(_name),
         album: "MusicVerse",
         artist: "Me",
-        title: _name,
+        title: clean(_name),
         extras: <String, dynamic>{
           'isFile': _isFile,
           'path': _path,

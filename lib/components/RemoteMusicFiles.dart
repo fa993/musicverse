@@ -22,6 +22,8 @@ class RemoteMusicFiles extends StatefulWidget {
 
 class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepAliveClientMixin {
   List<MusicItem> _children = [];
+  List<MusicItem> _globalChildren = [];
+  final TextEditingController _textEditingController = TextEditingController();
 
   Future<void> _playTrack(index) async {
     String fileName = _children[index].name;
@@ -41,7 +43,7 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
     try {
       final response = await http.get(Uri.parse(baseIndexURL));
       if (response.statusCode < 300 && response.statusCode >= 200) {
-        var childs = ((json.decode(response.body) as Map<String, dynamic>)["sub_entries"] as List)
+        var childs = ((json.decode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>)["sub_entries"] as List)
             .where((e) => e["entry_type"] == "File")
             .where((e) => e["name"]?.endsWith(".mp3"))
             .map((i) => i["name"])
@@ -51,6 +53,7 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
         if (mounted) {
           setState(() {
             _children = childs;
+            _globalChildren = childs;
           });
         }
       }
@@ -63,13 +66,19 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
   void initState() {
     super.initState();
     _loadTracks();
+    _textEditingController.addListener(() {
+      setState(() {
+        _children = _globalChildren.where((e) => e.name.toLowerCase().contains(_textEditingController.text.toLowerCase().trim())).toList();
+      });
+    });
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _stopPlaying();
-  // }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _textEditingController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +95,7 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
       builder: (context, index) => _children[index].name,
       musicListLength: _children.length,
       refreshMusicList: _loadTracks,
+      searchController: _textEditingController,
     );
   }
 

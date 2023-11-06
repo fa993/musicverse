@@ -13,6 +13,8 @@ class MusicList extends StatefulWidget {
 
   final Future<void> Function() refreshMusicList;
 
+  final TextEditingController? searchController;
+
   const MusicList({
     super.key,
     required this.onClick,
@@ -21,6 +23,7 @@ class MusicList extends StatefulWidget {
     required this.builder,
     required this.musicListLength,
     required this.refreshMusicList,
+    this.searchController
   });
 
   @override
@@ -37,6 +40,7 @@ class _MusicListState extends State<MusicList> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
           child: TextField(
+            controller: widget.searchController,
             onTapOutside: (e) {
               FocusManager.instance.primaryFocus?.unfocus();
             },

@@ -19,8 +19,10 @@ class LocalMusicFiles extends StatefulWidget {
 }
 
 class _LocalMusicFilesState extends State<LocalMusicFiles> with AutomaticKeepAliveClientMixin {
+  List<MusicFile> _globalChildren = [];
   List<MusicFile> _children = [];
   List<MusicItem> _copyChildren = [];
+  final TextEditingController _textEditingController = TextEditingController();
 
   void refresh() {
     setState(() {
@@ -30,7 +32,8 @@ class _LocalMusicFilesState extends State<LocalMusicFiles> with AutomaticKeepAli
           .map((e) => MusicFile(file: File(e.path), name: Path.basename(e.path)))
           .toList()
         ..sort((a, b) => a.name.compareTo(b.name));
-      _copyChildren = _children.map((e) => e.toMusicItem()).toList()..sort((a, b) => a.name.compareTo(b.name));
+      _globalChildren = _children;
+      _copyChildren = _children.map((e) => e.toMusicItem()).toList();
     });
   }
 
@@ -38,6 +41,18 @@ class _LocalMusicFilesState extends State<LocalMusicFiles> with AutomaticKeepAli
   void initState() {
     super.initState();
     refresh();
+    _textEditingController.addListener(() {
+      setState(() {
+        _children = _globalChildren.where((e) => e.name.toLowerCase().contains(_textEditingController.text.toLowerCase().trim())).toList();
+        _copyChildren = _children.map((e) => e.toMusicItem()).toList();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _textEditingController.dispose();
   }
 
   Future<void> _playTrack(index) async {
@@ -63,6 +78,7 @@ class _LocalMusicFilesState extends State<LocalMusicFiles> with AutomaticKeepAli
       builder: (context, index) => _children[index].name,
       musicListLength: _children.length,
       refreshMusicList: () async => refresh(),
+      searchController: _textEditingController,
     );
   }
 
