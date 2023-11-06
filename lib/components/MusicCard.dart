@@ -23,9 +23,10 @@ class MusicCard extends StatefulWidget {
   State<MusicCard> createState() => _MusicCardState();
 }
 
-class _MusicCardState extends State<MusicCard> {
+class _MusicCardState extends State<MusicCard> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SizedBox(
       child: Card(
         child: GFListTile(
@@ -46,4 +47,7 @@ class _MusicCardState extends State<MusicCard> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
