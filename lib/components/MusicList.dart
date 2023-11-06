@@ -15,16 +15,15 @@ class MusicList extends StatefulWidget {
 
   final TextEditingController? searchController;
 
-  const MusicList({
-    super.key,
-    required this.onClick,
-    required this.onIconClick,
-    required this.icon,
-    required this.builder,
-    required this.musicListLength,
-    required this.refreshMusicList,
-    this.searchController
-  });
+  const MusicList(
+      {super.key,
+      required this.onClick,
+      required this.onIconClick,
+      required this.icon,
+      required this.builder,
+      required this.musicListLength,
+      required this.refreshMusicList,
+      this.searchController});
 
   @override
   State<MusicList> createState() => _MusicListState();

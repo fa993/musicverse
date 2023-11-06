@@ -46,12 +46,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: const Text("Clear cache"),
               onPressed: (context) async {
                 var t = cacheDir.listSync();
-                for(var ch in t) {
+                for (var ch in t) {
                   await ch.delete(recursive: true);
                 }
               },
             )
-        ],),
+          ],
+        ),
       ],
     );
   }
@@ -69,10 +70,9 @@ class TextFieldSettingsScreen extends StatefulWidget {
 class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
   final _textEditingController = TextEditingController();
 
-
   Future<void> _loadPref() async {
     var val = preferences.getString(widget.propertyKey);
-    if(val == null) {
+    if (val == null) {
       return;
     }
     _textEditingController.text = val;
@@ -121,7 +121,8 @@ class _TextFieldSettingsScreenState extends State<TextFieldSettingsScreen> {
               height: 20.0,
             ),
             OutlinedButton(
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiaryContainer)),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.tertiaryContainer)),
               child: const Text("Save"),
               onPressed: () async {
                 await preferences.setString(widget.propertyKey, _textEditingController.text);

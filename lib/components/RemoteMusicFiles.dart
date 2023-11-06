@@ -68,11 +68,12 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
     _loadTracks();
     _textEditingController.addListener(() {
       setState(() {
-        _children = _globalChildren.where((e) => e.name.toLowerCase().contains(_textEditingController.text.toLowerCase().trim())).toList();
+        _children = _globalChildren
+            .where((e) => e.name.toLowerCase().contains(_textEditingController.text.toLowerCase().trim()))
+            .toList();
       });
     });
   }
-
 
   @override
   void dispose() {

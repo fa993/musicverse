@@ -43,7 +43,9 @@ class _LocalMusicFilesState extends State<LocalMusicFiles> with AutomaticKeepAli
     refresh();
     _textEditingController.addListener(() {
       setState(() {
-        _children = _globalChildren.where((e) => e.name.toLowerCase().contains(_textEditingController.text.toLowerCase().trim())).toList();
+        _children = _globalChildren
+            .where((e) => e.name.toLowerCase().contains(_textEditingController.text.toLowerCase().trim()))
+            .toList();
         _copyChildren = _children.map((e) => e.toMusicItem()).toList();
       });
     });
