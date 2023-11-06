@@ -35,7 +35,7 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
   Future<void> _loadTracks() async {
     String? baseSourceURL = preferences.getString("RemoteURLSource");
     String? baseIndexURL = preferences.getString("RemoteURLIndex");
-    if(baseIndexURL == null){
+    if (baseIndexURL == null) {
       return;
     }
     try {
@@ -46,7 +46,8 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
             .where((e) => e["name"]?.endsWith(".mp3"))
             .map((i) => i["name"])
             .map((e) => MusicItem.uri(e, "$baseSourceURL/$e"))
-            .toList();
+            .toList()
+          ..sort((a, b) => a.name.compareTo(b.name));
         if (mounted) {
           setState(() {
             _children = childs;

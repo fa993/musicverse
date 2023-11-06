@@ -10,7 +10,6 @@ import '../models/MusicItem.dart';
 import 'MusicList.dart';
 
 class LocalMusicFiles extends StatefulWidget {
-
   static final AudioController audioController = AudioController.instance;
 
   const LocalMusicFiles({super.key});
@@ -20,14 +19,18 @@ class LocalMusicFiles extends StatefulWidget {
 }
 
 class _LocalMusicFilesState extends State<LocalMusicFiles> with AutomaticKeepAliveClientMixin {
-
   List<MusicFile> _children = [];
   List<MusicItem> _copyChildren = [];
 
   void refresh() {
     setState(() {
-      _children = appDir.listSync().where((e) => e.path.endsWith(".mp3")).map((e) => MusicFile(file: File(e.path), name: Path.basename(e.path))).toList();
-      _copyChildren = _children.map((e) => e.toMusicItem()).toList();
+      _children = appDir
+          .listSync()
+          .where((e) => e.path.endsWith(".mp3"))
+          .map((e) => MusicFile(file: File(e.path), name: Path.basename(e.path)))
+          .toList()
+        ..sort((a, b) => a.name.compareTo(b.name));
+      _copyChildren = _children.map((e) => e.toMusicItem()).toList()..sort((a, b) => a.name.compareTo(b.name));
     });
   }
 

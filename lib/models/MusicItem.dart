@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:musicverse/components/MusicCard.dart';
 
 class MusicItem {
   final bool _isFile;
@@ -17,7 +18,7 @@ class MusicItem {
   String get name => _name;
 
   MediaItem toMediaItem() => MediaItem(
-        id: _name,
+        id: clean(_name),
         album: "MusicVerse",
         artist: "Me",
         title: _name,

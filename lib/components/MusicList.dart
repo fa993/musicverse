@@ -37,6 +37,9 @@ class _MusicListState extends State<MusicList> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
           child: TextField(
+            onTapOutside: (e) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
             autocorrect: true,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
@@ -73,16 +76,14 @@ class _MusicListState extends State<MusicList> {
                       ]);
                     },
                   ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) => MusicCard(
-                        onClick: () => widget.onClick(context, index),
-                        onIconClick: () => widget.onIconClick(context, index),
-                        songName: widget.builder(context, index),
-                        icon: widget.icon,
-                      ),
-                      childCount: widget.musicListLength,
+                  SliverList.builder(
+                    itemBuilder: (BuildContext context, int index) => MusicCard(
+                      onClick: () => widget.onClick(context, index),
+                      onIconClick: () => widget.onIconClick(context, index),
+                      songName: widget.builder(context, index),
+                      icon: widget.icon,
                     ),
+                    itemCount: widget.musicListLength,
                   ),
                 ],
               ),
