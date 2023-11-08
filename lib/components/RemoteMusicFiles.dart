@@ -49,7 +49,7 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
             .where((e) => e["entry_type"] == "File")
             .where((e) => e["name"]?.endsWith(".mp3"))
             .map((i) => i["name"])
-            .map((e) => MusicItem.uri(e, "$baseSourceURL/$e"))
+            .map((e) => MusicItem.uri(e, "$baseSourceURL/${Uri.encodeComponent(e).toString()}"))
             .toList()
           ..sort((a, b) => a.name.compareTo(b.name));
         if (mounted) {
