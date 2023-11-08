@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musicverse/main.dart';
 
@@ -57,7 +58,7 @@ class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
 
   Future<void> playTrackWithQueue(int currentIndex, List<MusicItem> queue) async {
     _currentIndex = currentIndex;
-    if (queue != _currentItems) {
+    if (!listEquals(queue, _currentItems)) {
       _currentItems = queue;
       super.queue.add(queue.map((e) => e.toMediaItem()).toList());
     }
@@ -66,7 +67,6 @@ class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
 
   Future<void> setCurrentMusicItem() async {
     var music = _currentItems[_currentIndex];
-    var auSource = music.toAudioSource();
     if (!music.isFile) {
       //for the sake of duration we will download to tmp and then play
       var localPath = "${cacheDir.path}${Platform.pathSeparator}${music.name}";
@@ -74,10 +74,10 @@ class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
         await dio.download(music.path, localPath, options: Options(headers: {HttpHeaders.authorizationHeader: token}));
       }
       music = MusicItem.file(music.name, "${cacheDir.path}${Platform.pathSeparator}${music.name}");
-      auSource = music.toAudioSource();
     }
+    var auSource = music.toAudioSource();
     var dur = await _player.setAudioSource(auSource);
-    var mI = music.toMediaItem().copyWith(duration: dur);
+    var mI = music.toMediaItem(duration: dur);
     mediaItem.add(mI);
     await play();
   }

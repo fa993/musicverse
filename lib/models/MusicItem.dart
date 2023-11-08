@@ -17,7 +17,7 @@ class MusicItem {
 
   String get name => _name;
 
-  MediaItem toMediaItem() => MediaItem(
+  MediaItem toMediaItem({Duration? duration}) => MediaItem(
         id: clean(_name),
         album: "MusicVerse",
         artist: "Me",
@@ -26,6 +26,7 @@ class MusicItem {
           'isFile': _isFile,
           'path': _path,
         },
+        duration: duration
       );
 
   AudioSource toAudioSource() {

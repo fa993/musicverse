@@ -24,10 +24,10 @@ class EagerMusicList extends StatefulWidget {
       this.searchController});
 
   @override
-  State<EagerMusicList> createState() => _MusicListState();
+  State<EagerMusicList> createState() => _EagerMusicListState();
 }
 
-class _MusicListState extends State<EagerMusicList> {
+class _EagerMusicListState extends State<EagerMusicList> {
   final ScrollController _scrollController = ScrollController();
 
   @override

@@ -88,6 +88,7 @@ class _MusicVerseState extends State<MusicVerse> {
           title: const Text("MusicVerse"),
         ),
         body: const TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             Center(
               child: LocalMusicFiles(),

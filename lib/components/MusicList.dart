@@ -15,15 +15,16 @@ class MusicList extends StatefulWidget {
 
   final TextEditingController? searchController;
 
-  const MusicList(
-      {super.key,
-      required this.onClick,
-      required this.onIconClick,
-      required this.icon,
-      required this.builder,
-      required this.musicListLength,
-      required this.refreshMusicList,
-      this.searchController});
+  const MusicList({
+    super.key,
+    required this.onClick,
+    required this.onIconClick,
+    required this.icon,
+    required this.builder,
+    required this.musicListLength,
+    required this.refreshMusicList,
+    this.searchController,
+  });
 
   @override
   State<MusicList> createState() => _MusicListState();
@@ -63,36 +64,37 @@ class _MusicListState extends State<MusicList> {
         Expanded(
           child: Scrollbar(
             controller: _scrollController,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
-              child: CustomScrollView(
-                controller: _scrollController,
-                physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
+            child: CustomScrollView(
+              controller: _scrollController,
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              slivers: [
+                CupertinoSliverRefreshControl(
+                  onRefresh: () async {
+                    await Future.wait([
+                      Future<void>.delayed(const Duration(milliseconds: 200)),
+                      widget.refreshMusicList(),
+                    ]);
+                  },
                 ),
-                slivers: [
-                  CupertinoSliverRefreshControl(
-                    onRefresh: () async {
-                      await Future.wait([
-                        Future<void>.delayed(const Duration(milliseconds: 200)),
-                        widget.refreshMusicList(),
-                      ]);
-                    },
-                  ),
-                  SliverList.builder(
-                    itemBuilder: (BuildContext context, int index) => MusicCard(
+                SliverList.builder(
+                  itemBuilder: (BuildContext context, int index) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+                    child: MusicCard(
                       onClick: () => widget.onClick(context, index),
                       onIconClick: () => widget.onIconClick(context, index),
                       songName: widget.builder(context, index),
                       icon: widget.icon,
                     ),
-                    itemCount: widget.musicListLength,
                   ),
-                ],
-              ),
+                  itemCount: widget.musicListLength,
+                ),
+              ],
             ),
           ),
         ),
+        // ),
       ],
     );
   }
