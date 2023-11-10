@@ -160,14 +160,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  getwidget:
-    dependency: "direct main"
-    description:
-      name: getwidget
-      sha256: "91df14a8d80e21f3ec02759295b90cc8badb8a872b90d34ad4aeb4085d833b5c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.0"
   http:
     dependency: "direct main"
     description:
@@ -200,14 +192,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.35"
-  just_audio_background:
-    dependency: "direct main"
-    description:
-      name: just_audio_background
-      sha256: d290c9c450083aee40cc481e2cb4c088dcbca35961598970ea1b6a6f6c68ae13
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1-beta.10"
   just_audio_platform_interface:
     dependency: transitive
     description:

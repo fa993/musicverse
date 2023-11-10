@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 
 String clean(String name) {
   return name.substring(0, name.lastIndexOf('.'));
@@ -29,12 +28,11 @@ class _MusicCardState extends State<MusicCard> with AutomaticKeepAliveClientMixi
     super.build(context);
     return SizedBox(
       child: Card(
-        child: GFListTile(
-          padding: EdgeInsets.zero,
-          margin: EdgeInsets.zero,
+        child: ListTile(
+          contentPadding: const EdgeInsets.only(left: 16.0),
           title: Text(clean(widget.songName)),
           onTap: widget.onClick,
-          icon: ElevatedButton(
+          trailing: ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
               backgroundColor: Theme.of(context).colorScheme.background,

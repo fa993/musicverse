@@ -18,16 +18,15 @@ class MusicItem {
   String get name => _name;
 
   MediaItem toMediaItem({Duration? duration}) => MediaItem(
-        id: clean(_name),
-        album: "MusicVerse",
-        artist: "Me",
-        title: clean(_name),
-        extras: <String, dynamic>{
-          'isFile': _isFile,
-          'path': _path,
-        },
-        duration: duration
-      );
+      id: clean(_name),
+      album: "MusicVerse",
+      artist: "Me",
+      title: clean(_name),
+      extras: <String, dynamic>{
+        'isFile': _isFile,
+        'path': _path,
+      },
+      duration: duration);
 
   AudioSource toAudioSource() {
     if (_isFile) {
