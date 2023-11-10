@@ -5,9 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:musicverse/main.dart';
+import 'package:musicverse/services/AudioDownloader.dart';
 
 import '../auth/secrets.dart';
 import '../models/MusicItem.dart';
+
+final cacheAudioDL = AudioDownloader();
 
 class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
   static final AudioController instance = AudioController._();
@@ -70,9 +73,13 @@ class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
     if (!music.isFile) {
       //for the sake of duration we will download to tmp and then play
       var localPath = "${cacheDir.path}${Platform.pathSeparator}${music.name}";
-      if (!await File(localPath).exists()) {
-        await dio.download(music.path, localPath, options: Options(headers: {HttpHeaders.authorizationHeader: token}));
+
+      if (cacheAudioDL.isCurrentlyDownloading(music.path)) {
+        return;
+      } else if (!await File(localPath).exists()) {
+        await cacheAudioDL.save(music.path, localPath);
       }
+
       music = MusicItem.file(music.name, "${cacheDir.path}${Platform.pathSeparator}${music.name}");
     }
     var auSource = music.toAudioSource();

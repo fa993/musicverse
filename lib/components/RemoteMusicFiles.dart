@@ -10,8 +10,9 @@ import 'package:musicverse/components/Settings.dart';
 import 'package:musicverse/main.dart';
 import 'package:musicverse/models/MusicItem.dart';
 import 'package:musicverse/services/AudioController.dart';
+import 'package:musicverse/services/AudioDownloader.dart';
 
-// import 'EagerMusicList.dart';
+final remoteAudioDL = AudioDownloader();
 
 class RemoteMusicFiles extends StatefulWidget {
   static final AudioController audioController = AudioController.instance;
@@ -91,8 +92,7 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
         _playTrack(index);
       },
       onIconClick: (context, index) async {
-        dio.download(_children[index].path, "${appDir.path}${Platform.pathSeparator}${_children[index].name}",
-            options: Options(headers: {HttpHeaders.authorizationHeader: token}));
+        remoteAudioDL.save(_children[index].path, "${appDir.path}${Platform.pathSeparator}${_children[index].name}");
       },
       icon: const Icon(Icons.download),
       builder: (context, index) => _children[index].name,

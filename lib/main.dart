@@ -11,8 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/LocalMusicFiles.dart';
 
-final dio = Dio();
-
 late final Directory appDir;
 late final Directory cacheDir;
 
