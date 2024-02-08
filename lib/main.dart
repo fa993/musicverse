@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:musicverse/components/RemoteMusicFiles.dart';
 import 'package:musicverse/components/Settings.dart';

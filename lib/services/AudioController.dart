@@ -1,14 +1,10 @@
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:musicverse/main.dart';
 import 'package:musicverse/services/AudioDownloader.dart';
-
-import '../auth/secrets.dart';
-import '../models/MusicItem.dart';
+import 'package:musicverse/models/MusicItem.dart';
 
 final cacheAudioDL = AudioDownloader();
 
@@ -70,18 +66,6 @@ class AudioController extends BaseAudioHandler with SeekHandler, QueueHandler {
 
   Future<void> setCurrentMusicItem() async {
     var music = _currentItems[_currentIndex];
-    if (!music.isFile) {
-      //for the sake of duration we will download to tmp and then play
-      var localPath = "${cacheDir.path}${Platform.pathSeparator}${music.name}";
-
-      if (cacheAudioDL.isCurrentlyDownloading(music.path)) {
-        return;
-      } else if (!await File(localPath).exists()) {
-        await cacheAudioDL.save(music.path, localPath);
-      }
-
-      music = MusicItem.file(music.name, "${cacheDir.path}${Platform.pathSeparator}${music.name}");
-    }
     var auSource = music.toAudioSource();
     var dur = await _player.setAudioSource(auSource);
     var mI = music.toMediaItem(duration: dur);
