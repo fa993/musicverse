@@ -6,6 +6,7 @@ import 'MusicCard.dart';
 class MusicList extends StatefulWidget {
   final Future<void> Function(BuildContext, int) onClick;
   final Future<void> Function(BuildContext, int) onIconClick;
+  final dynamic Function(BuildContext, int)? onLongPress;
   final Icon icon;
 
   final String Function(BuildContext, int) builder;
@@ -24,6 +25,7 @@ class MusicList extends StatefulWidget {
     required this.musicListLength,
     required this.refreshMusicList,
     this.searchController,
+    this.onLongPress,
   });
 
   @override
@@ -85,6 +87,7 @@ class _MusicListState extends State<MusicList> {
                       onClick: () => widget.onClick(context, index),
                       onIconClick: () => widget.onIconClick(context, index),
                       songName: widget.builder(context, index),
+                      onLongPress: widget.onLongPress == null ? null : () => widget.onLongPress!(context, index),
                       icon: widget.icon,
                     ),
                   ),

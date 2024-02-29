@@ -9,6 +9,7 @@ class MusicCard extends StatefulWidget {
   final VoidCallback onClick;
   final VoidCallback onIconClick;
   final Icon icon;
+  final Function()? onLongPress;
 
   const MusicCard({
     super.key,
@@ -16,6 +17,7 @@ class MusicCard extends StatefulWidget {
     required this.onClick,
     required this.onIconClick,
     required this.icon,
+    this.onLongPress
   });
 
   @override
@@ -32,6 +34,7 @@ class _MusicCardState extends State<MusicCard> with AutomaticKeepAliveClientMixi
           contentPadding: const EdgeInsets.only(left: 16.0),
           title: Text(clean(widget.songName)),
           onTap: widget.onClick,
+          onLongPress: widget.onLongPress,
           trailing: ElevatedButton(
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),

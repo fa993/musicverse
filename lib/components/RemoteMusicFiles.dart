@@ -11,6 +11,7 @@ import 'package:musicverse/main.dart';
 import 'package:musicverse/models/MusicItem.dart';
 import 'package:musicverse/services/AudioController.dart';
 import 'package:musicverse/services/AudioDownloader.dart';
+import 'package:share_plus/share_plus.dart';
 
 final remoteAudioDL = AudioDownloader();
 
@@ -93,6 +94,9 @@ class _RemoteMusicFilesState extends State<RemoteMusicFiles> with AutomaticKeepA
       },
       onIconClick: (context, index) async {
         remoteAudioDL.save(_children[index].path, "${appDir.path}${Platform.pathSeparator}${_children[index].name}");
+      },
+      onLongPress: (context, index) {
+        Share.shareUri(Uri.tryParse(_children[index].path)!);
       },
       icon: const Icon(Icons.download),
       builder: (context, index) => _children[index].name,
