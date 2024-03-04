@@ -81,7 +81,6 @@ class _MusicVerseState extends State<MusicVerse> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
           title: const Text("MusicVerse"),
         ),
         body: const TabBarView(
